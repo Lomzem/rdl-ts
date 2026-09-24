@@ -155,14 +155,20 @@ export function analyzeInput(
     });
     if (incomplete) reasons.push(message);
   }
+  const referenceKeys = new Set<string>();
   function reference(name: string, definition: SourceRange, range: SourceRange) {
-    references.push({
+    const record: SymbolReference = {
       name,
       definition: physical(definition),
       range: physical(range),
       generated: generated(range),
       provenance: provenance(range),
-    });
+    };
+    // Different bindings or expansion provenance remain distinct, even at one physical range.
+    const key = JSON.stringify(record);
+    if (referenceKeys.has(key)) return;
+    referenceKeys.add(key);
+    references.push(record);
   }
   const rootScope: Scope = {
     nodes: new Map(),
@@ -458,7 +464,14 @@ export function analyzeInput(
     };
   }
   function evalExpr(expression: ExpressionSyntax, scope: Scope): RdlValue | undefined {
-    const result = evaluateExpression(expression.text, context(scope, expression));
+    return evalText(expression.text, scope, expression);
+  }
+  function evalText(
+    text: string,
+    scope: Scope,
+    expression?: ExpressionSyntax,
+  ): RdlValue | undefined {
+    const result = evaluateExpression(text, context(scope, expression));
     if (Result.isFailure(result)) {
       diagnostic(
         result.failure.code === "expression.nonconstant"
@@ -467,7 +480,7 @@ export function analyzeInput(
             ? "unsupported.reserved-enum-concat"
             : result.failure.code,
         result.failure.message,
-        expression.range,
+        expression?.range,
         [
           "expression.resource",
           "expression.nonconstant",
@@ -1074,24 +1087,26 @@ export function analyzeInput(
     }
     for (const parameter of declaration.parameters ?? []) {
       const override = inheritedParameters?.[parameter.name];
-      const expression =
+      const expression = argumentsByName.get(parameter.name) ?? parameter.value;
+      const value =
         override !== undefined
-          ? { text: override, range: syntax.range }
-          : (argumentsByName.get(parameter.name) ?? parameter.value);
-      const value = expression
-        ? evalExpr(
-            expression,
-            argumentsByName.has(parameter.name) || override !== undefined ? caller : scope,
-          )
-        : undefined;
+          ? evalText(override, caller)
+          : expression
+            ? evalExpr(expression, argumentsByName.has(parameter.name) ? caller : scope)
+            : undefined;
       if (value === undefined)
         diagnostic(
           "parameter.value",
           `Parameter '${parameter.name}' requires a value.`,
-          parameter.range,
+          override === undefined ? parameter.range : undefined,
         );
       else {
-        const converted = coerce(parameter.type, value, scope, parameter.range);
+        const converted = coerce(
+          parameter.type,
+          value,
+          scope,
+          override === undefined ? parameter.range : undefined,
+        );
         if (converted !== undefined) scope.values.set(parameter.name, converted);
       }
     }

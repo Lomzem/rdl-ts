@@ -34,3 +34,13 @@ Implement modules and comprehensive supported-feature fixtures; integrate; indep
 - Final local gates passed: 164 tests and 509 assertions, TypeScript, oxlint, oxfmt, ESM build, Node smoke, Chromium smoke, and four pinned reference comparisons.
 - Integration reviewer approved after re-running all six regressions. API/editing reviewer approved. Final semantic reference-index cleanup passed 85 focused API/project/semantic/conformance tests; independent semantic review approved.
 - Next steps: conventional implementation commit, push branch, open PR, inspect CI and CodeRabbit, fix/re-review until accepted, then merge and verify.
+
+## PR review round one
+
+- PR https://github.com/Lomzem/rdl-ts/pull/2, implementation head c38e856. CI passed, including actual Node 22 runtime.
+- CodeRabbit requested seven changes. Six valid findings are under fix: research status, subprocess startup errors, literal control-character roundtripping, bounded bigint work, duplicate physical references, and source-less configuration override provenance.
+- Perl lexical-scanning suggestion was a false positive. Replied with SystemRDL sections 16/16.1.1; CodeRabbit independently checked the standard, withdrew the finding, and resolved its thread. Added string/inactive-branch regressions and compatibility note.
+- Root owns editing/docs/reference changes and tests/review-fixes.test.ts. effect_options owns expressions/semantics fixes; language_matrix independently reviews the combined changes before push.
+- Continue until CodeRabbit accepts the latest head, CI passes, and PR is merged. User reiterated autonomous merge authorization on 2026-09-24. Wait out any rate limits rather than stopping.
+
+- Round-one fixes independently approved. Full validation now passes 173 tests/555 assertions, build, Node/Chromium workflows, and pinned compiler comparisons. Missing and non-executable reference interpreter probes report ENOENT/EACCES correctly. Next push addresses all six remaining findings.

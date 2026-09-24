@@ -156,3 +156,59 @@ test("reference index records every hierarchy segment through trivia", () => {
     ),
   ).toBe(true);
 });
+
+test("repeated elaboration emits each physical reference once", () => {
+  const text = "field F {}; reg W {F data;}; addrmap top {W first;W second;};";
+  const report = analyze(text);
+  expect(report.diagnostics).toEqual([]);
+  const occurrence = text.indexOf("F data");
+  expect(
+    report.references.filter((reference) => reference.range.start === occurrence),
+  ).toHaveLength(1);
+  expect(new Set(report.references.map((reference) => JSON.stringify(reference))).size).toBe(
+    report.references.length,
+  );
+});
+test("deduplicating references preserves different include provenance", () => {
+  const text =
+    'field F {}; addrmap top {reg {\n`include "fields"\n} first;reg {\n`include "fields"\n} second;};';
+  const report = analyze(text, {
+    files: [
+      { id: "main.rdl", text },
+      { id: "fields", text: "F data;" },
+    ],
+    configurations: [
+      {
+        id: "test",
+        roots: ["main.rdl"],
+        includes: [{ from: "main.rdl", request: "fields", to: "fields" }],
+      },
+    ],
+  });
+  expect(report.diagnostics).toEqual([]);
+  const references = report.references.filter(
+    (reference) => reference.range.documentId === "fields" && reference.name === "F",
+  );
+  expect(references).toHaveLength(2);
+  expect(references[0]!.provenance?.chain).not.toEqual(references[1]!.provenance?.chain);
+});
+test("configuration overrides have no invented source references or diagnostic positions", () => {
+  const text = "enum E { A=0; }; addrmap top #(E MODE=E::A) {reg {field {} data;} ctrl;};";
+  const report = analyze(text, {
+    configurations: [{ id: "test", roots: ["main.rdl"], parameters: { MODE: "E::A" } }],
+  });
+  expect(report.diagnostics).toEqual([]);
+  for (const reference of report.references)
+    expect(text.slice(reference.range.start, reference.range.end)).toBe(reference.name);
+  const numeric = "addrmap top #(longint COUNT=1) {reg {field {} data;} ctrl;};";
+  for (const override of ["UNKNOWN", '"wrong type"']) {
+    const invalid = analyze(numeric, {
+      configurations: [{ id: "test", roots: ["main.rdl"], parameters: { COUNT: override } }],
+    });
+    expect(invalid.diagnostics.length).toBeGreaterThan(0);
+    for (const diagnostic of invalid.diagnostics) {
+      expect(diagnostic.range).toBeUndefined();
+      expect(diagnostic.provenance).toBeUndefined();
+    }
+  }
+});

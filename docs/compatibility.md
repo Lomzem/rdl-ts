@@ -19,3 +19,7 @@ This library accepts a field or signal of the required width, following the expl
 ## Software access inside memories
 
 Section 11.2 requires virtual fields' software access to match the containing memory. This library inherits the memory's access when a virtual field has no explicit setting and diagnoses an explicit conflicting setting. The pinned compiler accepts a read/write virtual field inside a read-only memory and retains the field's read/write default when no setting is supplied. The specification fixtures exercise the library's stricter interpretation.
+
+## Perl delimiters and preprocessing order
+
+Sections 16 and 16.1.1 run embedded Perl before Verilog-style preprocessing. SystemRDL comments, quoted strings, and inactive conditional branches therefore do not suppress Perl delimiters. This library detects `<%` in the original input and reports incomplete preprocessing even when it appears inside one of those regions. It preserves the source and never executes the Perl. Moving detection to the later SystemRDL lexical scanner would miss input that depends on the excluded preprocessing phase.

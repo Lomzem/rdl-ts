@@ -19,6 +19,7 @@ interface Token {
 }
 type Tree = { op: string; text?: string; args: Tree[] };
 const MAX_WIDTH = 1_000_000n;
+const MAX_POWER_WORK = 8_000_000n;
 export function integer(value: bigint, width = 64n): IntegerValue {
   if (width < 1n || width > MAX_WIDTH)
     throw new EvalError(
@@ -485,8 +486,18 @@ function evaluateUncached(tree: Tree, context: ExpressionContext, contextWidth?:
         throw new EvalError("expression.resource", "Concatenation width limit exceeded.");
       n = (n << value.width) | value.value;
     }
-    let repeated = 0n;
-    for (let i = 0n; i < count; i++) repeated = (repeated << width) | n;
+    let repeated = 0n,
+      chunk = n,
+      chunkWidth = width,
+      remaining = count;
+    while (remaining > 0n) {
+      if (remaining & 1n) repeated = (repeated << chunkWidth) | chunk;
+      remaining >>= 1n;
+      if (remaining > 0n) {
+        chunk = (chunk << chunkWidth) | chunk;
+        chunkWidth *= 2n;
+      }
+    }
     return integer(repeated, width * count);
   }
   if (tree.op.startsWith("unary")) {
@@ -499,7 +510,7 @@ function evaluateUncached(tree: Tree, context: ExpressionContext, contextWidth?:
     if (op === "-") return integer(-n, w);
     if (op === "~") return integer(~n, w);
     let parity = false;
-    for (let x = n; x !== 0n; x &= x - 1n) parity = !parity;
+    if (op.includes("^")) for (const bit of n.toString(2)) if (bit === "1") parity = !parity;
     const result = op.includes("&") ? n === (1n << w) - 1n : op.includes("|") ? n !== 0n : parity;
     return op.includes("~") ? !result : result;
   }
@@ -560,6 +571,10 @@ function evaluateUncached(tree: Tree, context: ExpressionContext, contextWidth?:
   if ((op === "/" || op === "%") && b === 0n)
     throw new EvalError("expression.zero", "Division by zero.");
   if (op === "**") {
+    if (b === 0n || a === 1n) return integer(1n, width);
+    if (a === 0n || ((a & 1n) === 0n && b >= width)) return integer(0n, width);
+    if (BigInt(b.toString(2).length) * width > MAX_POWER_WORK)
+      throw new EvalError("expression.resource", "Exponentiation exceeds the bigint work limit.");
     let result = 1n,
       base = a,
       exponent = b;

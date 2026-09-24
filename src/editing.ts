@@ -79,7 +79,12 @@ export function literal(value: string | boolean | bigint): string {
     return `0x${value.toString(16)}`;
   }
   if (typeof value === "boolean") return String(value);
-  return JSON.stringify(value);
+  return `"${value
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, "\\n")
+    .replace(/\t/g, "\\t")
+    .replace(/\r/g, "\\r")}"`;
 }
 
 function renderComponent(
@@ -893,6 +898,27 @@ export function prepare(
               "Cannot establish complete reference coverage.",
             ),
           );
+        const externalExpressions = [
+          ...captured.input.configurations.flatMap((configuration) => [
+            ...Object.values(configuration.parameters ?? {}),
+            ...Object.values(configuration.macros ?? {}),
+          ]),
+          ...(captured.input.properties ?? []).flatMap((property) => [
+            property.type,
+            ...(property.default === undefined ? [] : [property.default]),
+          ]),
+        ];
+        const externalReference = externalExpressions.some(
+          (expression) => identifiers(expression, node.name).length > 0,
+        );
+        if (!command.partial && externalReference)
+          return yield* Effect.fail(
+            failure(
+              "PrepareFailure",
+              "incomplete-rename",
+              "Captured configuration or external property expressions may reference this declaration. They cannot be updated by a source rename; explicitly request a partial rename.",
+            ),
+          );
         const refs = beforeReports.flatMap((r) => r.references);
         const ranges = [
           node.nameRange,
@@ -943,7 +969,7 @@ export function prepare(
             code: "partial-rename",
             severity: "warning",
             phase: "semantic",
-            message: `Only reliably resolved references to ${node.name} were renamed. Inactive, unresolved, or generated references may retain the previous name.`,
+            message: `Only reliably resolved references to ${node.name} were renamed. Inactive, unresolved, or generated references may retain the previous name.${externalReference ? " Configuration or external property expressions require separate updates." : ""}`,
             range: node.nameRange,
           });
         }

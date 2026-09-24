@@ -9,6 +9,7 @@ const python = process.env.RDL_REFERENCE_PYTHON ?? "python3";
 for (const name of ["basic", "udp", "parameters", "arrays"]) {
   const file = `tests/fixtures/${name}.rdl`;
   const reference = spawnSync(python, ["scripts/reference.py", file], { encoding: "utf8" });
+  if (reference.error) throw new Error(`Reference compiler failed: ${reference.error.message}`);
   if (reference.status !== 0) throw new Error(`Reference compiler failed: ${reference.stderr}`);
   const p = open({
     files: [{ id: "main", text: readFileSync(file, "utf8") }],

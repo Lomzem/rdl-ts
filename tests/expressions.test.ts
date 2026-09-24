@@ -45,3 +45,18 @@ test("conditional branches determine width and require compatible types", () => 
 test("long arithmetic chains do not repeatedly evaluate the same subexpression", () => {
   expect(value(Array.from({ length: 150 }, () => "1").join("+"))).toEqual(integer(150n));
 });
+
+test("large replication and reductions bound bigint work", () => {
+  expect(value("{1000000{1'b1}}")).toEqual(integer((1n << 1_000_000n) - 1n, 1_000_000n));
+  expect(value("^(~1000000'(0))")).toBe(false);
+  expect(value("^(~999999'(0))")).toBe(true);
+  expect(value("{5{3'b101}}")).toEqual(integer(0b101101101101101n, 15n));
+});
+test("exponentiation limits work and resolves modular zero without multiplication", () => {
+  const rejected = evaluateExpression("1000000'(3) ** ~1000000'(0)");
+  expect(Result.isFailure(rejected)).toBe(true);
+  if (Result.isFailure(rejected)) expect(rejected.failure.code).toBe("expression.resource");
+  expect(value("1000000'(2) ** ~1000000'(0)")).toEqual(integer(0n, 1_000_000n));
+  expect(value("0 ** 0")).toEqual(integer(1n));
+  expect(value("3 ** 127")).toEqual(integer(3n ** 127n));
+});
