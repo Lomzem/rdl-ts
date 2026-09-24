@@ -233,6 +233,8 @@ export interface SymbolReference {
 export interface AnalysisReport {
   readonly revision: string;
   readonly configurationId: string;
+  /** Declaration selected by an explicit configuration.top value, when resolved. */
+  readonly topSelection?: SourceProvenance;
   readonly diagnostics: readonly Diagnostic[];
   readonly coverage: Coverage;
   readonly model: "complete" | "partial" | "unavailable";

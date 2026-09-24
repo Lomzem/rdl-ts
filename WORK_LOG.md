@@ -50,3 +50,9 @@ Implement modules and comprehensive supported-feature fixtures; integrate; indep
 - CodeRabbit accepted the round-one fixes and identified one additional rename dependency: captured configuration.top selections.
 - Added conservative complete-rename rejection and explicit partial-rename disclosure for that dependency. Independent reviewer approved; 29 focused API/project/review tests and 104 assertions pass, along with TypeScript, lint, and formatting.
 - User requested less frequent GitHub polling. Use roughly three-minute polling intervals during pending reviews, while remaining active until merge.
+
+## PR review round three
+
+- Waited through the review limit, then CodeRabbit found the top selector guard over-conservative for same-named nested instances.
+- Replaced name-only dependency detection with the actual resolved topSelection provenance in AnalysisReport. Rename compares exact physical declaration identity and checks other captured configurations when needed.
+- Independent reviewer approved seven focused regressions, including same-named nested fields, inline type/instance priority, and a dependency outside the requested validation configurations. Full local check now passes 177 tests/567 assertions.

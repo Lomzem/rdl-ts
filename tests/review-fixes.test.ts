@@ -86,3 +86,72 @@ test("renames disclose captured top-level selections", async () => {
   if (Result.isSuccess(draft))
     expect(serialize(draft.success)[0]!.text).toBe(text.replace("addrmap top", "addrmap renamed"));
 });
+
+test("a nested instance sharing the selected top name can be renamed completely", async () => {
+  const text = "addrmap top { reg { field {} top; } rr; };";
+  const opened = open({
+    files: [{ id: "main", text }],
+    configurations: [{ id: "main", roots: ["main"], top: "top" }],
+  });
+  if (Result.isFailure(opened)) throw new Error(opened.failure.message);
+  const snapshot = opened.success;
+  const field = source(snapshot).documents[0]!.nodes[0]!.children![0]!.children![0]!.instances![0]!;
+  const selected = handle(snapshot, field);
+  if (Result.isFailure(selected)) throw new Error(selected.failure.message);
+  const candidate = await Effect.runPromise(
+    prepare(snapshot, [{ kind: "rename", target: selected.success, name: "data" }], {
+      mode: "configured",
+      configurations: ["main"],
+    }),
+  );
+  const next = apply(snapshot, candidate);
+  expect(Result.isSuccess(next)).toBe(true);
+  if (Result.isSuccess(next))
+    expect(serialize(next.success)[0]!.text).toBe(text.replace("field {} top", "field {} data"));
+});
+
+test("top selection distinguishes a type from its same-named inline instance", async () => {
+  const text = "addrmap top { reg { field {} f; } rr; } top;";
+  const opened = open({
+    files: [{ id: "main", text }],
+    configurations: [{ id: "main", roots: ["main"], top: "top" }],
+  });
+  if (Result.isFailure(opened)) throw new Error(opened.failure.message);
+  const snapshot = opened.success;
+  const root = source(snapshot).documents[0]!.nodes[0]!;
+  const selected = handle(snapshot, root.instances![0]!);
+  if (Result.isFailure(selected)) throw new Error(selected.failure.message);
+  const candidate = await Effect.runPromise(
+    prepare(snapshot, [{ kind: "rename", target: selected.success, name: "inst" }], {
+      mode: "configured",
+      configurations: ["main"],
+    }),
+  );
+  expect(Result.isSuccess(apply(snapshot, candidate))).toBe(true);
+  expect(candidate.reports[0]!.topSelection?.range).toEqual(root.nameRange);
+});
+
+test("top dependencies in other captured configurations use resolved identities", async () => {
+  const text = "addrmap A { reg { field {} f; } rr; }; addrmap B { reg { field {} f; } rr; };";
+  const opened = open({
+    files: [{ id: "main", text }],
+    configurations: [
+      { id: "a", roots: ["main"], top: "A" },
+      { id: "b", roots: ["main"], top: "B" },
+    ],
+  });
+  if (Result.isFailure(opened)) throw new Error(opened.failure.message);
+  const snapshot = opened.success;
+  const selected = handle(snapshot, source(snapshot).documents[0]!.nodes[1]!);
+  if (Result.isFailure(selected)) throw new Error(selected.failure.message);
+  const result = await Effect.runPromise(
+    Effect.result(
+      prepare(snapshot, [{ kind: "rename", target: selected.success, name: "C" }], {
+        mode: "configured",
+        configurations: ["a"],
+      }),
+    ),
+  );
+  expect(Result.isFailure(result)).toBe(true);
+  if (Result.isFailure(result)) expect(result.failure.code).toBe("incomplete-rename");
+});

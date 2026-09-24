@@ -2189,6 +2189,7 @@ export function analyzeInput(
           ? "partial"
           : "complete",
     roots: result,
+    ...(config.top && topNode?.nameRange ? { topSelection: provenance(topNode.nameRange) } : {}),
     references,
   };
 }

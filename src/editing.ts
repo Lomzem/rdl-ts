@@ -908,9 +908,20 @@ export function prepare(
             ...(property.default === undefined ? [] : [property.default]),
           ]),
         ];
-        const topReference = captured.input.configurations.some(
-          (configuration) => configuration.top === node.name,
-        );
+        let topReference = false;
+        if (node.kind === "component" || node.kind === "instance") {
+          for (const configuration of captured.input.configurations) {
+            if (configuration.top !== node.name) continue;
+            const report =
+              beforeReports.find((report) => report.configurationId === configuration.id) ??
+              (yield* analyze(snapshot, configuration.id));
+            const selection = report.topSelection;
+            if (selection && !selection.generated && sameRange(selection.range, node.nameRange)) {
+              topReference = true;
+              break;
+            }
+          }
+        }
         const externalReference = externalExpressions.some(
           (expression) => identifiers(expression, node.name).length > 0,
         );
