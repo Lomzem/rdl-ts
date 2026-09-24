@@ -1,0 +1,7 @@
+addrmap top {
+    reg {
+        field { sw = rw; hw = r; reset = 8'h12; } status[7:0];
+        field { sw = r; hw = w; } ready[8:8];
+    } control @ 0x10;
+    reg { field { sw = rw; hw = r; } value[31:0]; } data;
+};

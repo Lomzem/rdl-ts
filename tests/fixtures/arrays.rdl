@@ -1,0 +1,3 @@
+addrmap top {
+    reg { field { sw = rw; hw = r; } value[7:0]; } bank[4] @ 0x20 += 0x10;
+};

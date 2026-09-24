@@ -1,0 +1,29 @@
+# Research and design proposals
+
+The research answers factual questions raised by the scope interview. The [language-boundary resolution](../wayfinder/0004-language-boundary.md), [source/editing resolution](../wayfinder/0005-source-editing.md), and [public-interface resolution](../wayfinder/0006-public-interface.md) record accepted policies. The later [implementation design](../design.md) resolves delegated technical choices. The library and specification-derived tests are now implemented. See the [project README](../../README.md) for current usage and checks, and [initial workload examples](../performance.md) for measurements.
+
+## Read first
+
+Start with the reviewed [SystemRDL library design](../design.md). [Parser options](./parser-options.md) supplies the final parser comparison. The documents below preserve the earlier research.
+
+| Document                                                               | What it provides                                                                                                                                     |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Language coverage research](./language-coverage.md)                   | Feature matrix, UDP requirements, proposed compiler pin and deferrals, and concrete specification ambiguities.                                       |
+| [Proposed source and editing interface](./source-editing-interface.md) | Opening, inspecting, creating, editing, validating, applying, and serializing documents; source targets and semantic views; candidate record sketch. |
+| [Errors-as-values interface research](./error-interface.md)            | Verified Effect 4 behavior and comparison with ordinary TypeScript result values.                                                                    |
+
+## Recommendations
+
+Use the original source as the saved representation and derive semantic views for each explicit configuration. Separate shared declarations from elaborated instances. Revision-bound candidates preserve text and make grouped application explicit. Validate candidates against the included files and external declarations as well as the main document.
+
+Use plain document/report records, Result for synchronous fallible operations, and Effect for workflows that benefit from cancellation and structured execution. This interface choice is accepted; do not add a second facade without a consumer need. The installed Effect version is a release candidate, and the user accepted that public dependency.
+
+Keep specification-derived tests primary. The limited comparison suite uses the accepted `systemrdl-compiler==1.32.2` pin to check interoperability. No exporter is a language authority. Research alone does not establish conformance; the executable tests check specific supported behaviors.
+
+Treat the undefined preprocessor `if`, compilation-unit boundaries, empty-array literal syntax, and contradictory reserved-enum concatenation rules as explicit interpretation decisions. Do not silently invent semantics or copy every compiler behavior.
+
+## Design outcome
+
+The local [Design the SystemRDL library](../wayfinder/0001-library-design.md) map is complete. Its resolutions record the accepted language policies, source/editing model, Effect interface, application policies, and delegated technical design.
+
+The user answered product decisions and delegated routine technical choices. The implementation design records those choices and their verification gates. Runtime checks and specification fixtures now run in CI. Measurements and their limits are recorded in the workload examples.
