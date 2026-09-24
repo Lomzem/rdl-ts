@@ -908,15 +908,18 @@ export function prepare(
             ...(property.default === undefined ? [] : [property.default]),
           ]),
         ];
+        const topReference = captured.input.configurations.some(
+          (configuration) => configuration.top === node.name,
+        );
         const externalReference = externalExpressions.some(
           (expression) => identifiers(expression, node.name).length > 0,
         );
-        if (!command.partial && externalReference)
+        if (!command.partial && (externalReference || topReference))
           return yield* Effect.fail(
             failure(
               "PrepareFailure",
               "incomplete-rename",
-              "Captured configuration or external property expressions may reference this declaration. They cannot be updated by a source rename; explicitly request a partial rename.",
+              "Captured configuration values or external property expressions may reference this declaration, including a configuration.top selection. These dependencies require separate updates; explicitly request a partial rename.",
             ),
           );
         const refs = beforeReports.flatMap((r) => r.references);
@@ -969,7 +972,7 @@ export function prepare(
             code: "partial-rename",
             severity: "warning",
             phase: "semantic",
-            message: `Only reliably resolved references to ${node.name} were renamed. Inactive, unresolved, or generated references may retain the previous name.${externalReference ? " Configuration or external property expressions require separate updates." : ""}`,
+            message: `Only reliably resolved references to ${node.name} were renamed. Inactive, unresolved, or generated references may retain the previous name.${externalReference || topReference ? " Configuration values, configuration.top, or external property expressions require separate updates." : ""}`,
             range: node.nameRange,
           });
         }

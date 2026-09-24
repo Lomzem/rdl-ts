@@ -44,3 +44,9 @@ Implement modules and comprehensive supported-feature fixtures; integrate; indep
 - Continue until CodeRabbit accepts the latest head, CI passes, and PR is merged. User reiterated autonomous merge authorization on 2026-09-24. Wait out any rate limits rather than stopping.
 
 - Round-one fixes independently approved. Full validation now passes 173 tests/555 assertions, build, Node/Chromium workflows, and pinned compiler comparisons. Missing and non-executable reference interpreter probes report ENOENT/EACCES correctly. Next push addresses all six remaining findings.
+
+## PR review round two
+
+- CodeRabbit accepted the round-one fixes and identified one additional rename dependency: captured configuration.top selections.
+- Added conservative complete-rename rejection and explicit partial-rename disclosure for that dependency. Independent reviewer approved; 29 focused API/project/review tests and 104 assertions pass, along with TypeScript, lint, and formatting.
+- User requested less frequent GitHub polling. Use roughly three-minute polling intervals during pending reviews, while remaining active until merge.

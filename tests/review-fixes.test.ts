@@ -58,3 +58,31 @@ test("complete renames disclose source-less configuration dependencies", async (
   if (Result.isSuccess(next))
     expect(serialize(next.success)[0]!.text).toBe(text.replace(/\bE\b/g, "Mode"));
 });
+
+test("renames disclose captured top-level selections", async () => {
+  const text = "addrmap top { reg { field {} f; } rr; };";
+  const opened = open({
+    files: [{ id: "main", text }],
+    configurations: [{ id: "main", roots: ["main"], top: "top" }],
+  });
+  if (Result.isFailure(opened)) throw new Error(opened.failure.message);
+  const snapshot = opened.success;
+  const selected = handle(snapshot, source(snapshot).documents[0]!.nodes[0]!);
+  if (Result.isFailure(selected)) throw new Error(selected.failure.message);
+  const command = { kind: "rename" as const, target: selected.success, name: "renamed" };
+  const configured = { mode: "configured" as const, configurations: ["main"] };
+  const result = await Effect.runPromise(Effect.result(prepare(snapshot, [command], configured)));
+  expect(Result.isFailure(result)).toBe(true);
+  if (Result.isFailure(result)) expect(result.failure.code).toBe("incomplete-rename");
+  const partial = await Effect.runPromise(
+    prepare(snapshot, [{ ...command, partial: true }], configured),
+  );
+  expect(partial.diagnostics.find((d) => d.code === "partial-rename")?.message).toContain(
+    "configuration.top",
+  );
+  expect(Result.isFailure(apply(snapshot, partial))).toBe(true);
+  const draft = apply(snapshot, partial, "draft");
+  expect(Result.isSuccess(draft)).toBe(true);
+  if (Result.isSuccess(draft))
+    expect(serialize(draft.success)[0]!.text).toBe(text.replace("addrmap top", "addrmap renamed"));
+});
