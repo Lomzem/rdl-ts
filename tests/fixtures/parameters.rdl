@@ -1,0 +1,7 @@
+reg word_t #(longint unsigned WIDTH = 16) {
+    field { sw = rw; hw = r; reset = 0; } data[WIDTH-1:0];
+};
+addrmap top {
+    word_t #(.WIDTH(8)) control;
+    word_t value;
+};

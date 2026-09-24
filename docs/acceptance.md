@@ -1,6 +1,6 @@
 # Acceptance examples
 
-These examples make confirmed scope concrete. They are behavioral requirements, not implemented tests or a claim of complete language coverage.
+These examples make the confirmed scope concrete. The implementation tests exercise these requirements. Passing them is not a claim of complete language conformance.
 
 ## Create a new document
 

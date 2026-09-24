@@ -1,2 +1,7 @@
 node_modules
 read-only
+dist
+coverage
+playwright-report
+test-results
+.venv

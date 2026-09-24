@@ -1,0 +1,8 @@
+property owner { type = string; component = reg; };
+property count { type = longint unsigned; component = field; default = 42; };
+addrmap top {
+    reg {
+        owner = "firmware";
+        field { count; sw = rw; hw = r; } value[7:0];
+    } control;
+};

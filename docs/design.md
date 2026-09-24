@@ -1,6 +1,6 @@
 # SystemRDL library design
 
-This design resolves routine technical choices delegated by the user. It implements the accepted [scope](./scope.md) and [decision map](./wayfinder/0001-library-design.md). It is a plan, not an implementation or evidence of conformance. Public names and records below are the initial implementation contract; private algorithms may change without changing that contract.
+This design resolves routine technical choices delegated by the user. It implements the accepted [scope](./scope.md) and [decision map](./wayfinder/0001-library-design.md). It records the implementation contract; passing tests provide evidence for specific behaviors, not complete language conformance. Public names and records below are the initial implementation contract; private algorithms may change without changing that contract.
 
 ## Interface
 
@@ -19,7 +19,7 @@ Preparation options explicitly select either a nonempty list of configuration ID
 
 The application runs effects at its own execution boundary. Use `runPromiseExit` when it wants failures, defects, and interruption as values. Library internals do not run an application's effects synchronously. See [verified Effect behavior](./research/error-interface.md).
 
-Publish one ESM package with TypeScript declarations and no Node filesystem imports in the browser entry point. Initial runtime targets are modern evergreen browsers and Node.js 22 or later, consistent with the selected parser. Keep Effect at the researched 4.0.0-rc.117 and Chevrotain at 13.2.0 when adding implementation dependencies, with a lockfile. Broader runtime/version compatibility is not a first-release promise. No dependency changes have been made during planning.
+Publish one ESM package with TypeScript declarations and no Node filesystem imports in the browser entry point. Initial runtime targets are modern evergreen browsers and Node.js 22 or later, consistent with the selected parser. Keep Effect at the researched 4.0.0-rc.117 and Chevrotain at 13.2.0 when adding implementation dependencies, with a lockfile. Broader runtime/version compatibility is not a first-release promise. The implementation pins these versions in the package manifest and lockfile.
 
 ## Captured inputs and freshness
 

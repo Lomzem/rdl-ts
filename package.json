@@ -1,9 +1,43 @@
 {
+  "name": "@lomzem/rdl",
+  "version": "0.1.0",
+  "description": "Source-preserving SystemRDL analysis and editing",
+  "files": [
+    "dist",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.tests.json",
+    "test": "bun test",
+    "lint": "oxlint src tests scripts",
+    "format": "oxfmt --check .",
+    "check": "bun run typecheck && bun run lint && bun test && bun run build",
+    "test:browser": "bun scripts/browser.ts",
+    "test:reference": "bun scripts/reference.ts",
+    "test:node": "node scripts/node.mjs"
+  },
   "dependencies": {
-    "effect": "^4.0.0-rc.117"
+    "chevrotain": "13.2.0",
+    "effect": "4.0.0-rc.117"
   },
   "devDependencies": {
+    "@types/bun": "1.4.2",
+    "@types/node": "26.6.2",
+    "esbuild": "0.28.2",
     "oxfmt": "^0.70.0",
-    "oxlint": "^1.85.0"
+    "oxlint": "^1.85.0",
+    "playwright": "1.63.0",
+    "typescript": "7.0.2"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
