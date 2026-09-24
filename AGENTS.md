@@ -1,3 +1,7 @@
+## SystemRDL
+
+There is a full SystemRDL specification (uncommitted on purpose) in @read-only/systemrdl-2.0-spec.txt . Use that as reference.
+
 ## TypeScript Rules
 
 - Always `oxlint` and `oxfmt` your code
