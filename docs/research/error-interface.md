@@ -1,6 +1,6 @@
 # Errors-as-values interface research
 
-Research date: 2026-09-23. This note resolves the research question in "Compare errors-as-values interface options". Its interface recommendation is a proposal for the owner, not an accepted design decision.
+Research date: 2026-09-23. This note preserves the research for "Compare errors-as-values interface options". The later [public-interface resolution](../wayfinder/0006-public-interface.md) accepts direct Effect use and application policy; the conceptual workflow below is not an implemented API.
 
 ## Recommendation
 
@@ -79,6 +79,6 @@ Effect does not make a long, synchronous parser loop stop blocking the browser s
 
 If the GUI later uses a worker, send explicit data records and define how results cross that interface. Do not assume arbitrary Effect objects or callbacks are transportable. Numeric representation and worker encoding are separate design questions and are not resolved by choosing an error library.
 
-## Decision still required
+## Decision outcome
 
-The owner should choose whether public `Result` and `Effect` types are acceptable for personal consumers. The recommendation is yes, with one interface and no ordinary-TypeScript facade initially. This research does not authorize implementation or settle every operation's execution mode.
+The owner accepted public `Result` and `Effect` types for personal consumers, with one interface and no ordinary-TypeScript facade initially. See the linked resolution for the accepted policy. This does not authorize implementation or settle every operation's exact signature.

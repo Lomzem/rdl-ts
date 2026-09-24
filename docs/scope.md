@@ -33,18 +33,18 @@ This document records confirmed scope and open questions from the design intervi
 - Prepare candidate edits without changing the current document. Report text changes, diagnostics, and analysis completeness. Consumers may deliberately retain invalid drafts, with validation errors still reported as errors.
 - Accepting a candidate with errors or incomplete validation requires an explicit consumer policy. A consumer may establish that policy for an editing session; a confirmation dialog for every edit is not required. Draft acceptance does not waive operation-specific requirements or permit ambiguous targets.
 - Apply grouped edits entirely or leave the document unchanged. Validate the final candidate rather than requiring every intermediate step to be valid.
-- Prefer errors as values rather than exception-based control flow. Expected operation failures and document diagnostics should be available as values. The exact public representation remains undecided.
+- Prefer errors as values rather than exception-based control flow. The accepted [public-interface decision](./wayfinder/0006-public-interface.md) specifies direct Effect use, Result for synchronous fallible operations, and ordinary document/report records. It also defines checked application by default with an explicit draft policy. Exact signatures and error variants remain to be designed.
 - Exclude dedicated comment-authoring operations. Preserve existing comments as part of source preservation. Editing documentation through built-in properties such as `name` and `desc` is covered by property editing.
 - Edit previews include changes to calculated addresses and field positions when analysis permits a reliable comparison. Report incomplete comparison otherwise. Never silently add explicit addresses to preserve the previous layout.
 - Callers may mark source files read-only. Analysis may use those files. Applying a grouped edit that touches a read-only file fails as a value and changes no files. Do not silently redirect the edit elsewhere.
 
 ## Remaining research and planning
 
-- Review the remaining [interface proposals](./research/README.md) through the local [design decision map](./wayfinder/0001-library-design.md). The language boundary and source/editing model are accepted; public-interface details remain proposals.
+- Continue technical design through the local [design decision map](./wayfinder/0001-library-design.md). The language boundary, source/editing model, public Effect dependency, and acceptance policies are settled. Parser choice, concrete operation signatures, and internal module design remain.
 - Select the exact compiler pin for limited interoperability checks during implementation planning. Workplace exporter versions are not a prerequisite for defining library scope.
 - Establish representative project sizes using synthetic fixtures initially. File counts, register counts, and array sizes for real projects remain unknown; do not claim performance guarantees without measurements.
 - Refine the agreed behaviors in [acceptance examples](./acceptance.md) into executable fixtures during implementation.
-- Design the library's internal representation and public API within the confirmed scope before implementation. The scope interview has not selected those designs.
+- Design the library's internal representation and concrete interface within the confirmed scope before implementation. The interview has settled behavior and dependency choices, not every implementation detail.
 
 ## Compatibility research
 
