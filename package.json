@@ -1,5 +1,7 @@
 {
-  "dependencies": {},
+  "dependencies": {
+    "effect": "^4.0.0-rc.117"
+  },
   "devDependencies": {
     "oxfmt": "^0.70.0",
     "oxlint": "^1.85.0"

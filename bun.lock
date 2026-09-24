@@ -3,6 +3,9 @@
   "configVersion": 1,
   "workspaces": {
     "": {
+      "dependencies": {
+        "effect": "^4.0.0-rc.117",
+      },
       "devDependencies": {
         "oxfmt": "^0.70.0",
         "oxlint": "^1.85.0",
@@ -85,6 +88,8 @@
     "@oxlint/binding-win32-ia32-msvc": ["@oxlint/binding-win32-ia32-msvc@1.85.0", "", { "os": "win32", "cpu": "ia32" }, "sha512-eSsIJx9n4yxvOqYTZyPEMyEXRmE60XH7xGAU7i0Qbsn1lf6Za3CWJ9aRd82oSFKXaxhp+sA6/yMJVRIpLpna6A=="],
 
     "@oxlint/binding-win32-x64-msvc": ["@oxlint/binding-win32-x64-msvc@1.85.0", "", { "os": "win32", "cpu": "x64" }, "sha512-pBebIPUpKKhWrhSMWhy8TdAZBewiXnfxmaAGxhzxM1068GagqFaTwgKlU6e+UyJ2sPR+VoHouhXuGJkQjsrDvA=="],
+
+    "effect": ["effect@4.0.0-rc.117", "", {}, "sha512-UUyi9QiOW4nySFIBM3KnYbNMd9EZliOdKfBcyLD0mPMPheO2fkuXS5y0opjWc9oqzlJxPQICEGm8gGw3kh9j/w=="],
 
     "oxfmt": ["oxfmt@0.70.0", "", { "dependencies": { "tinypool": "2.1.2" }, "optionalDependencies": { "@oxfmt/binding-android-arm-eabi": "0.70.0", "@oxfmt/binding-android-arm64": "0.70.0", "@oxfmt/binding-darwin-arm64": "0.70.0", "@oxfmt/binding-darwin-x64": "0.70.0", "@oxfmt/binding-freebsd-x64": "0.70.0", "@oxfmt/binding-linux-arm-gnueabihf": "0.70.0", "@oxfmt/binding-linux-arm-musleabihf": "0.70.0", "@oxfmt/binding-linux-arm64-gnu": "0.70.0", "@oxfmt/binding-linux-arm64-musl": "0.70.0", "@oxfmt/binding-linux-ppc64-gnu": "0.70.0", "@oxfmt/binding-linux-riscv64-gnu": "0.70.0", "@oxfmt/binding-linux-riscv64-musl": "0.70.0", "@oxfmt/binding-linux-s390x-gnu": "0.70.0", "@oxfmt/binding-linux-x64-gnu": "0.70.0", "@oxfmt/binding-linux-x64-musl": "0.70.0", "@oxfmt/binding-openharmony-arm64": "0.70.0", "@oxfmt/binding-win32-arm64-msvc": "0.70.0", "@oxfmt/binding-win32-ia32-msvc": "0.70.0", "@oxfmt/binding-win32-x64-msvc": "0.70.0" }, "peerDependencies": { "svelte": "^5.0.0", "vite-plus": "*" }, "optionalPeers": ["svelte", "vite-plus"], "bin": { "oxfmt": "bin/oxfmt" } }, "sha512-IsHxZ4y0wQLLMhnrJblBJgZsLDzfULrJnAw5j/QqsTlMa/m3AqsbToi+W71uhBGaqlqq/PbbjvHc09TJwdv3Tw=="],
 
