@@ -25,6 +25,7 @@ Prefer errors as values and consider Effect. SystemRDL is the language authority
 - [Establish language coverage and compiler differences](./0002-language-research.md): produced a feature matrix and identified concrete ambiguity decisions.
 - [Compare errors-as-values interface options](./0003-effect-research.md): verified installed Effect 4 behavior and compared interface costs; the recommendation remains subject to the public-interface decision.
 - [Approve the first-release language boundary](./0004-language-boundary.md): accepted the five interpretation and semantic-deferral policies.
+- [Choose the source and editing model](./0005-source-editing.md): accepted separate source/semantic views, explicit instance edits, and candidates bound to their preparation inputs.
 
 ## Not yet specified
 

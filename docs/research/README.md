@@ -1,6 +1,6 @@
 # Research and design proposals
 
-The research answers factual questions raised by the scope interview. The [language-boundary resolution](../wayfinder/0004-language-boundary.md) records accepted policies; interface recommendations remain proposals. No library implementation, conformance suite, or performance measurements exist yet.
+The research answers factual questions raised by the scope interview. The [language-boundary resolution](../wayfinder/0004-language-boundary.md) and [source/editing resolution](../wayfinder/0005-source-editing.md) record accepted policies. Public-interface details remain proposals. No library implementation, conformance suite, or performance measurements exist yet.
 
 ## Read first
 
@@ -22,6 +22,6 @@ Treat the undefined preprocessor `if`, compilation-unit boundaries, empty-array 
 
 ## Next decisions
 
-The local [Design the SystemRDL library](../wayfinder/0001-library-design.md) map tracks the remaining decisions. Research issues are closed with evidence links. The language boundary is accepted; the source/editing model is ready for review. Public-interface selection depends on the editing-model decision and the completed Effect research.
+The local [Design the SystemRDL library](../wayfinder/0001-library-design.md) map tracks the remaining decisions. Research issues are closed with evidence links. The language boundary and source/editing model are accepted. Public-interface selection is ready for review.
 
 The map is a planning aid. Human decisions close only on the user's answers. Parser implementation, exact persistent identity strategy, and measured performance needs remain later design work.

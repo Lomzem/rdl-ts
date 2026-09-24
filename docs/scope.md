@@ -12,6 +12,7 @@ This document records confirmed scope and open questions from the design intervi
 - Support browser and Node.js use. The future GUI must be able to run entirely in the client browser. Callers supply source contents and resolve file dependencies.
 - The library owns source preservation. Opening and saving without edits returns exactly the supplied source text. Value edits preserve text outside necessary edit locations. Structural edits preserve unaffected text and use a defined formatting policy for new text. The contract promises localized edits, not a mathematically smallest diff.
 - The consumer expresses editing intent, including whether a change targets a shared definition or an individual instance. The library identifies the effects of supported edits.
+- The accepted [source and editing model](./wayfinder/0005-source-editing.md) defines separate source/semantic views, refusal of unsupported instance-only transformations, and candidate freshness. Applying a candidate returns a new snapshot without changing the previous snapshot.
 - Preserve documents containing unsupported constructs and report limitations. Analysis reports whether it is complete, partial, or unavailable, with reasons. Require enough information to fulfill each structured operation's stated promise. An exact source replacement and a complete reference-aware rename have different requirements.
 - Exclude Perl execution. Preserve embedded Perl text, but refuse structured edits that require interpreting it.
 - Use SystemRDL 2.0 as the authority for language rules. PeakRDL interoperability is a practical requirement because workplace projects use it to generate artifacts, but exporter restrictions do not define the library's language model.
@@ -39,7 +40,7 @@ This document records confirmed scope and open questions from the design intervi
 
 ## Remaining research and planning
 
-- Review the remaining [interface proposals](./research/README.md) through the local [design decision map](./wayfinder/0001-library-design.md). The language-boundary decision is accepted; the source/editing model and public interface remain proposals.
+- Review the remaining [interface proposals](./research/README.md) through the local [design decision map](./wayfinder/0001-library-design.md). The language boundary and source/editing model are accepted; public-interface details remain proposals.
 - Select the exact compiler pin for limited interoperability checks during implementation planning. Workplace exporter versions are not a prerequisite for defining library scope.
 - Establish representative project sizes using synthetic fixtures initially. File counts, register counts, and array sizes for real projects remain unknown; do not claim performance guarantees without measurements.
 - Refine the agreed behaviors in [acceptance examples](./acceptance.md) into executable fixtures during implementation.

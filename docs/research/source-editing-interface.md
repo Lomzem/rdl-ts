@@ -1,6 +1,6 @@
 # Proposed source and editing interface
 
-This is a design sketch for review, not an implemented interface or an accepted ADR. It applies the agreed [scope](../scope.md) and [acceptance examples](../acceptance.md). Names below describe responsibilities; they are not final method signatures.
+This is a design sketch, not an implemented interface. The later [source/editing resolution](../wayfinder/0005-source-editing.md) records accepted behavior. Other interface details remain proposals. The sketch applies the agreed [scope](../scope.md) and [acceptance examples](../acceptance.md). Names below describe responsibilities; they are not final method signatures.
 
 ## Recommendation
 
