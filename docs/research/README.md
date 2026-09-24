@@ -1,8 +1,10 @@
 # Research and design proposals
 
-The research answers factual questions raised by the scope interview. The [language-boundary resolution](../wayfinder/0004-language-boundary.md), [source/editing resolution](../wayfinder/0005-source-editing.md), and [public-interface resolution](../wayfinder/0006-public-interface.md) record accepted policies. Exact signatures and internal implementation remain to be designed. No library implementation, conformance suite, or performance measurements exist yet.
+The research answers factual questions raised by the scope interview. The [language-boundary resolution](../wayfinder/0004-language-boundary.md), [source/editing resolution](../wayfinder/0005-source-editing.md), and [public-interface resolution](../wayfinder/0006-public-interface.md) record accepted policies. The later [implementation design](../design.md) resolves delegated technical choices. No library implementation, conformance suite, or performance measurements exist yet.
 
 ## Read first
+
+Start with the reviewed [SystemRDL library design](../design.md). [Parser options](./parser-options.md) supplies the final parser comparison. The documents below preserve the earlier research.
 
 | Document                                                               | What it provides                                                                                                                                     |
 | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -14,14 +16,14 @@ The research answers factual questions raised by the scope interview. The [langu
 
 Use the original source as the saved representation and derive semantic views for each explicit configuration. Separate shared declarations from elaborated instances. Revision-bound candidates preserve text and make grouped application explicit. Validate candidates against the included files and external declarations as well as the main document.
 
-Use plain document/report records, Result for synchronous fallible operations, and Effect for workflows that benefit from dependency resolution or cancellation. This is one proposed interface; do not add a second facade without a consumer need. The installed Effect version is a release candidate, so exposing it publicly is a real dependency choice.
+Use plain document/report records, Result for synchronous fallible operations, and Effect for workflows that benefit from cancellation and structured execution. This interface choice is accepted; do not add a second facade without a consumer need. The installed Effect version is a release candidate, and the user accepted that public dependency.
 
 Keep specification-derived tests primary. A limited comparison suite against the proposed `systemrdl-compiler==1.32.2` pin can check interoperability. No exporter is a language authority. Documentation research does not establish that an unimplemented library passes those checks.
 
 Treat the undefined preprocessor `if`, compilation-unit boundaries, empty-array literal syntax, and contradictory reserved-enum concatenation rules as explicit interpretation decisions. Do not silently invent semantics or copy every compiler behavior.
 
-## Next decisions
+## Design outcome
 
-The local [Design the SystemRDL library](../wayfinder/0001-library-design.md) map tracks the remaining decisions. The researched language policies, source/editing model, direct Effect interface, and application policies are accepted. The next work compares parser approaches and develops concrete module and interface designs.
+The local [Design the SystemRDL library](../wayfinder/0001-library-design.md) map is complete. Its resolutions record the accepted language policies, source/editing model, Effect interface, application policies, and delegated technical design.
 
-The map is a planning aid. Human decisions close only on the user's answers. Parser implementation, exact persistent identity strategy, and measured performance needs remain later design work.
+The user answered product decisions and delegated routine technical choices. The implementation design records those choices and their verification gates. Runtime measurements and conformance checks remain implementation work.

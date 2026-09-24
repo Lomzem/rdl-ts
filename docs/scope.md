@@ -40,11 +40,11 @@ This document records confirmed scope and open questions from the design intervi
 
 ## Remaining research and planning
 
-- Continue technical design through the local [design decision map](./wayfinder/0001-library-design.md). The language boundary, source/editing model, public Effect dependency, and acceptance policies are settled. Parser choice, concrete operation signatures, and internal module design remain.
-- Select the exact compiler pin for limited interoperability checks during implementation planning. Workplace exporter versions are not a prerequisite for defining library scope.
+- The [design decision map](./wayfinder/0001-library-design.md) is complete. The reviewed [implementation design](./design.md) resolves delegated technical choices within the accepted scope.
+- Initial dependency choices and the limited compiler verification pin are recorded in the design. Their runtime behavior still requires implementation tests; no exporter dependency defines language validity.
 - Establish representative project sizes using synthetic fixtures initially. File counts, register counts, and array sizes for real projects remain unknown; do not claim performance guarantees without measurements.
 - Refine the agreed behaviors in [acceptance examples](./acceptance.md) into executable fixtures during implementation.
-- Design the library's internal representation and concrete interface within the confirmed scope before implementation. The interview has settled behavior and dependency choices, not every implementation detail.
+- Follow the design's implementation sequence and early verification gates. Private algorithms may change without another scope interview when public guarantees remain intact.
 
 ## Compatibility research
 

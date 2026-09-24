@@ -2,6 +2,8 @@
 
 This is a design sketch, not an implemented interface. The later [source/editing resolution](../wayfinder/0005-source-editing.md) records accepted behavior. Other interface details remain proposals. The sketch applies the agreed [scope](../scope.md) and [acceptance examples](../acceptance.md). Names below describe responsibilities; they are not final method signatures.
 
+The subsequent [implementation design](../design.md) resolves the technical choices under the user's delegation and takes precedence over remaining proposals in this historical sketch.
+
 ## Recommendation
 
 Keep original source documents as the authority for saved text. Derive syntax and semantic views from them. Expose source declarations and elaborated instances as different kinds of targets. Prepare edits against a particular project revision and apply the resulting candidate atomically.
