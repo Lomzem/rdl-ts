@@ -7,7 +7,7 @@ This document records confirmed scope and open questions from the design intervi
 - Build a reusable TypeScript library for parsing and working with SystemRDL files. The GUI editor is a separate consumer project.
 - The intended consumer is the author across personal projects. Prioritize those workflows; broad third-party adoption is not a design goal.
 - The planning effort will produce an agreed first-release scope, acceptance examples, a glossary, and decision records where justified. Use a Wayfinder map if decisions require further sessions. Begin implementation after agreement on scope.
-- Include source editing and semantic analysis in the intended scope. Source editing must be usable independently of successful semantic analysis. The exact first-release language coverage remains open.
+- Include source editing and semantic analysis in the intended scope. Source editing must be usable independently of successful semantic analysis. The accepted [first-release language boundary](./wayfinder/0004-language-boundary.md) records interpretation and deferral policies.
 - Support UDP declarations, assignments, validation, and semantics within the supported language subset. Retaining arbitrary property names and values alone is insufficient.
 - Support browser and Node.js use. The future GUI must be able to run entirely in the client browser. Callers supply source contents and resolve file dependencies.
 - The library owns source preservation. Opening and saving without edits returns exactly the supplied source text. Value edits preserve text outside necessary edit locations. Structural edits preserve unaffected text and use a defined formatting policy for new text. The contract promises localized edits, not a mathematically smallest diff.
@@ -15,7 +15,7 @@ This document records confirmed scope and open questions from the design intervi
 - Preserve documents containing unsupported constructs and report limitations. Analysis reports whether it is complete, partial, or unavailable, with reasons. Require enough information to fulfill each structured operation's stated promise. An exact source replacement and a complete reference-aware rename have different requirements.
 - Exclude Perl execution. Preserve embedded Perl text, but refuse structured edits that require interpreting it.
 - Use SystemRDL 2.0 as the authority for language rules. PeakRDL interoperability is a practical requirement because workplace projects use it to generate artifacts, but exporter restrictions do not define the library's language model.
-- Defer first-release semantic support for standard features unsupported by the target PeakRDL compiler. Preserve their source and report the unsupported feature rather than calling it invalid SystemRDL. The exact feature list remains to be established.
+- Defer the features identified in the accepted language-boundary decision. Preserve their source and report the unsupported feature rather than calling it invalid SystemRDL.
 - Test language behavior primarily against specification-derived expectations. Use a limited, pinned set of PeakRDL/compiler interoperability checks in development and CI. Do not treat compiler output as the sole authority or automatically copy its deviations from the specification. Investigate and document discrepancies.
 - Python tooling may run in development and CI. The shipped library must work in the browser without a Python runtime or server.
 - Enforce standard UDP declaration, type, component applicability, binding, default, and assignment rules in the library. Consumers may add TypeScript validation for custom requirements. Arbitrary Python validators remain outside the browser library; consumers can run them through their toolchain. Exporter-specific validation is not a first-release requirement.
@@ -39,8 +39,8 @@ This document records confirmed scope and open questions from the design intervi
 
 ## Remaining research and planning
 
-- Review the [research and interface proposals](./research/README.md) through the local [design decision map](./wayfinder/0001-library-design.md). Research is complete; the recommendations are not yet accepted design decisions.
-- Review the proposed compiler pin and supported/deferred feature matrix. Workplace exporter versions are not a prerequisite for defining library scope. Decide the identified specification ambiguities explicitly.
+- Review the remaining [interface proposals](./research/README.md) through the local [design decision map](./wayfinder/0001-library-design.md). The language-boundary decision is accepted; the source/editing model and public interface remain proposals.
+- Select the exact compiler pin for limited interoperability checks during implementation planning. Workplace exporter versions are not a prerequisite for defining library scope.
 - Establish representative project sizes using synthetic fixtures initially. File counts, register counts, and array sizes for real projects remain unknown; do not claim performance guarantees without measurements.
 - Refine the agreed behaviors in [acceptance examples](./acceptance.md) into executable fixtures during implementation.
 - Design the library's internal representation and public API within the confirmed scope before implementation. The scope interview has not selected those designs.

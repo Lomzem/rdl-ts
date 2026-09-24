@@ -1,6 +1,6 @@
 # Language coverage research
 
-Research date: 2026-09-23. This is a proposal for review, not an implemented feature list or a new scope decision.
+Research date: 2026-09-23. This document preserves the research and its original proposals, not an implemented feature list. The later [language-boundary resolution](../wayfinder/0004-language-boundary.md) records which policies the user accepted.
 
 ## Authority and evidence
 
